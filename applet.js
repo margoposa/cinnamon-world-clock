@@ -18,7 +18,7 @@ WorldClock.prototype = {
 
         try {
             // Grab the UUID from metadata for Settings
-            this.settings = new Settings.AppletSettings(this, metadata.uuid, instance_id); 
+            this.settings = new Settings.AppletSettings(this, metadata.uuid, instance_id);
 
             this.settings.bindProperty(
                 Settings.BindingDirection.IN, // Setting type
@@ -26,7 +26,7 @@ WorldClock.prototype = {
                 "label", // The property to manage (this.label)
                 this.on_settings_changed, // Callback when value changes
                 null // Optional callback data
-            ); 
+            );
 
             this.settings.bindProperty(
                 Settings.BindingDirection.IN, // Setting type
@@ -62,7 +62,7 @@ WorldClock.prototype = {
     },
 
     // Create context menu items
-    buildContextMenu: function() {
+    buildContextMenu: function () {
         // this._applet_context_menu.removeAll();
 
         // let menuitem = new PopupMenu.PopupMenuItem("Refresh");
@@ -84,12 +84,21 @@ WorldClock.prototype = {
         var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
         var nd = new Date(utc + (3600000 * offset));
 
-        var txt = this.label + " " + this.formatTime(nd);
-
-        this.set_applet_label(txt);
+        this.set_applet_label(
+            this.label //+ this.label === '' ? '' : ' '
+            // txt
+            + ' '
+            + ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][nd.getDay()]
+            + ' '
+            + ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'Decemeber'][nd.getMonth()]
+            + ' '
+            + nd.getDate()
+            + ', '
+            + this.formatTime(nd)
+        );
     },
 
-    formatTime: function(d) {
+    formatTime: function (d) {
         var t = "";
 
         if (d.getHours() < 10) {
